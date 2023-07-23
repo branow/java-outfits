@@ -30,6 +30,19 @@ public class PolynomialTest {
         Assertions.assertEquals(expected, actual);
     }
 
+    @ParameterizedTest
+    @MethodSource("provideDivide")
+    public void divide(Polynomial p1, Polynomial p2, Polynomial expected) {
+        Polynomial actual = Polynomial.divide(p1, p2);
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideDivideArithmeticException")
+    public void divideArithmeticException(Polynomial p1, Polynomial p2) {
+        Assertions.assertThrows(ArithmeticException.class, () -> Polynomial.divide(p1, p2));
+    }
+
     private static Stream<Arguments> provideAdd() {
         return Stream.of(
                 Arguments.of(new Polynomial(), new Polynomial(0, 2, 3), new Polynomial(0, 2, 3)),
@@ -57,10 +70,37 @@ public class PolynomialTest {
                 Arguments.of(new Polynomial(), new Polynomial(), new Polynomial()),
                 Arguments.of(new Polynomial(0, 0), new Polynomial(7, -3, 4), new Polynomial()),
                 Arguments.of(new Polynomial(7, -3, 4), new Polynomial(0, 0, 0, 0, 0, 0), new Polynomial()),
+
                 Arguments.of(new Polynomial(1, 0), new Polynomial(0, 2), new Polynomial(0, 2)),
                 Arguments.of(new Polynomial(3, 1), new Polynomial(0, 2, 3), new Polynomial(0, 6, 11, 3)),
                 Arguments.of(new Polynomial(0, 5, 0), new Polynomial(1, 2, 3, 4), new Polynomial(0, 5, 10, 15, 20)),
                 Arguments.of(new Polynomial(1, 4, 2, -2, 3), new Polynomial(-1, 3, 0, 0, 2, 1), new Polynomial(-1, -1, 10, 8, -7, 18, 8, -2, 4, 3))
+        );
+    }
+
+    private static Stream<Arguments> provideDivide() {
+        return Stream.of(
+                Arguments.of(new Polynomial(), new Polynomial(0, 2, 3), new Polynomial()),
+                Arguments.of(new Polynomial(0, 2), new Polynomial(1, 0), new Polynomial(0, 2)),
+                Arguments.of(new Polynomial(0, 2), new Polynomial(0, 2), new Polynomial(1, 0)),
+                Arguments.of(new Polynomial(0, 6, 11, 3), new Polynomial(3, 1), new Polynomial(0, 2, 3)),
+                Arguments.of(new Polynomial(0, 6, 11, 3), new Polynomial(0, 2, 3), new Polynomial(3, 1)),
+                Arguments.of(new Polynomial(0, 5, 10, 15, 20), new Polynomial(0, 5, 0), new Polynomial(1, 2, 3, 4)),
+                Arguments.of(new Polynomial(0, 5, 10, 15, 20), new Polynomial(1, 2, 3, 4), new Polynomial(0, 5, 0)),
+                Arguments.of(new Polynomial(-1, -1, 10, 8, -7, 18, 8, -2, 4, 3), new Polynomial(1, 4, 2, -2, 3), new Polynomial(-1, 3, 0, 0, 2, 1)),
+                Arguments.of(new Polynomial(-1, -1, 10, 8, -7, 18, 8, -2, 4, 3), new Polynomial(-1, 3, 0, 0, 2, 1), new Polynomial(1, 4, 2, -2, 3))
+                );
+    }
+
+    private static Stream<Arguments> provideDivideArithmeticException() {
+        return Stream.of(
+                Arguments.of(new Polynomial(), new Polynomial()),
+                Arguments.of(new Polynomial(0, 2), new Polynomial()),
+                Arguments.of(new Polynomial(0, 2), new Polynomial(0, 2, 1)),
+                Arguments.of(new Polynomial(0, 6, 0, 3), new Polynomial(0, 5, 0, 4, 6)),
+                Arguments.of(new Polynomial(-1, 0, 2, 3), new Polynomial(-1, 1)),
+                Arguments.of(new Polynomial(0, 2, 1), new Polynomial(1, 1)),
+                Arguments.of(new Polynomial(0, 2, 1), new Polynomial(0, 1, 1))
         );
     }
 
