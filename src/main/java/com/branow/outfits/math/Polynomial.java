@@ -239,7 +239,7 @@ public class Polynomial implements Function {
 
     private void trim() {
         for (int i=0; i < coef.length; i++) {
-            if (coef[i] < delta)
+            if (Math.abs(coef[i]) < delta)
                 coef[i] = 0;
         }
 

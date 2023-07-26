@@ -38,6 +38,13 @@ public class PolynomialTest {
     }
 
     @ParameterizedTest
+    @MethodSource("provideDivideDecimal")
+    public void divideDecimal(Polynomial p1, Polynomial p2, Polynomial expected) {
+        Polynomial actual = Polynomial.divide(p1, p2);
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @ParameterizedTest
     @MethodSource("provideDivideArithmeticException")
     public void divideArithmeticException(Polynomial p1, Polynomial p2) {
         Assertions.assertThrows(ArithmeticException.class, () -> Polynomial.divide(p1, p2));
@@ -98,6 +105,17 @@ public class PolynomialTest {
                 );
     }
 
+    private static Stream<Arguments> provideDivideDecimal() {
+        return Stream.of(
+                Arguments.of(new Polynomial(0, 2.625, 1.25), new Polynomial(1.25), new Polynomial(0, 2.1, 1)),
+                Arguments.of(new Polynomial(0, 2.625, 1.25), new Polynomial(0, 2.1, 1), new Polynomial(1.25)),
+                Arguments.of(new Polynomial(0, -5.115, 3.3, 3.1248, -2.016), new Polynomial(-1.65, 0, 1.008), new Polynomial(0, 3.1, -2)),
+                Arguments.of(new Polynomial(0, -5.115, 3.3, 3.1248, -2.016), new Polynomial(0, 3.1, -2), new Polynomial(-1.65, 0, 1.008)),
+                Arguments.of(new Polynomial(0, 1, 1.5, -2.66, -5.99, -3), new Polynomial(0, 0.5, 0, -1.33, -1), new Polynomial(2, 3)),
+                Arguments.of(new Polynomial(0, 1, 1.5, -2.66, -5.99, -3), new Polynomial(2, 3), new Polynomial(0, 0.5, 0, -1.33, -1))
+        );
+    }
+
     private static Stream<Arguments> provideDivideArithmeticException() {
         return Stream.of(
                 Arguments.of(new Polynomial(), new Polynomial()),
@@ -109,7 +127,6 @@ public class PolynomialTest {
                 Arguments.of(new Polynomial(0, 2, 1), new Polynomial(0, 1, 1))
         );
     }
-
 
     private static Stream<Arguments> provideCalculate() {
         return Stream.of(
