@@ -9,7 +9,7 @@ import java.util.List;
  * Position of value in the array equals degree of x with which this coefficient locates.
  * For example, polynomial: (1 + x^2 + 4*x^5 - 3*x) is kept as [1, -3, 1, 0, 4]
  * */
-public class Polynomial {
+public class Polynomial implements Function {
 
     /**
      * The method adds two polynomials.
@@ -101,6 +101,7 @@ public class Polynomial {
     }
 
 
+    private final double delta = 0.000_000_1;
     private double[] coef;
 
     public Polynomial(double... coef) {
@@ -109,6 +110,22 @@ public class Polynomial {
         this.coef = coef;
         trim();
     }
+
+    /**
+     * The method calculates a value of polynomial for gotten {@code x}.
+     * @param x an argument
+     * @return a value of polynomial
+     * @see Function#calculate(double)
+     * */
+    @Override
+    public double calculate(double x) {
+        double res = 0;
+        for (int i=0; i<coef.length; i++) {
+            res += coef[i] * Math.pow(x, i);
+        }
+        return res;
+    }
+
 
     /**
      * The method returns a coefficient at according position.
@@ -221,6 +238,11 @@ public class Polynomial {
     }
 
     private void trim() {
+        for (int i=0; i < coef.length; i++) {
+            if (coef[i] < delta)
+                coef[i] = 0;
+        }
+
         int newLength = coef.length;
         for (int i=coef.length - 1; i >= 0; i--) {
             if (coef[i] == 0)

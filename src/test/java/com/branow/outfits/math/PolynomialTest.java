@@ -43,6 +43,12 @@ public class PolynomialTest {
         Assertions.assertThrows(ArithmeticException.class, () -> Polynomial.divide(p1, p2));
     }
 
+    @ParameterizedTest
+    @MethodSource("provideCalculate")
+    public void calculate(Polynomial polynomial, double x, double expected) {
+        Assertions.assertEquals(expected, polynomial.calculate(x), 0.00000001);
+    }
+
     private static Stream<Arguments> provideAdd() {
         return Stream.of(
                 Arguments.of(new Polynomial(), new Polynomial(0, 2, 3), new Polynomial(0, 2, 3)),
@@ -105,4 +111,13 @@ public class PolynomialTest {
     }
 
 
+    private static Stream<Arguments> provideCalculate() {
+        return Stream.of(
+                Arguments.of(new Polynomial(), 5, 0),
+                Arguments.of(new Polynomial(0, 2), -13.4, -26.8),
+                Arguments.of(new Polynomial(0, 6, 11, 3), 0.5, 6.125),
+                Arguments.of(new Polynomial(0, 5, 10, 15, 20), -1.2, 23.952),
+                Arguments.of(new Polynomial(-1, 3, 0, 0, 2, 1), 10, 120_029)
+        );
+    }
 }
