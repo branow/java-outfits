@@ -93,6 +93,12 @@ public class Polynomial implements Function {
             double[] mul = new double[min.degree() - p2.degree() + 1];
             mul[mul.length - 1] = min.getCoefficient(min.degree()) / p2.getCoefficient(p2.degree());
             Polynomial multiplier = new Polynomial(mul);
+
+            if (multiplier.toString().isEmpty()) {
+                throw new ArithmeticException("the difference between two number is too big, division can't be provided: "
+                        + min.getCoefficient(min.degree()) + " - " + p2.getCoefficient(p2.degree()));
+            }
+
             Polynomial sub = Polynomial.multiply(new Polynomial(p2.getCoefficients()), multiplier);
             min.subtract(sub);
             quotient.add(multiplier);
@@ -101,7 +107,7 @@ public class Polynomial implements Function {
     }
 
 
-    private final double delta = 0.000_000_1;
+    private final double delta = 1.E-300;
     private double[] coef;
 
     public Polynomial(double... coef) {
