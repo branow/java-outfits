@@ -1,5 +1,6 @@
 package com.branow.outfits.util;
 
+import java.nio.charset.Charset;
 import java.util.Arrays;
 
 /**
@@ -12,8 +13,8 @@ public class UniChar {
     private final byte[] bytes;
 
     /**
-     * It writes only first four bytes all others is skipped. If array hava less length than four bytes,
-     * zero bytes are written at the beginning.
+     * Copy the given byte array (using {@link Arrays#copyOf(int[], int)}). If the length of the given array
+     * longer than four bytes, it is cut equaling to four.
      *
      * @param code The byte representation of a character.
      */
@@ -51,7 +52,7 @@ public class UniChar {
             System.arraycopy(bytes, 0, res, 4 - bytes.length, bytes.length);
         else
             res = bytes;
-        return new char[] {
+        return new char[]{
                 ByteConverter.bytesToChar(res[0], res[1]),
                 ByteConverter.bytesToChar(res[2], res[3])
         };
@@ -88,12 +89,36 @@ public class UniChar {
         return Arrays.copyOf(bytes, bytes.length);
     }
 
+    /**
+     * Returns string representation of this {@code UniChar} with the given {@code charset}.
+     * It uses {@link String#String(byte[], Charset)}.
+     *
+     * @param charset The charset to be used to decode the bytes.
+     * @return The string representation of this {@code UniChar}.
+     */
+    public String toString(Charset charset) {
+        return new String(bytes, charset);
+    }
 
+    /**
+     * Returns string representation of this {@code UniChar}.
+     * It uses {@link String#String(byte[])}.
+     *
+     * @return The string representation of this {@code UniChar}.
+     */
     @Override
     public String toString() {
         return new String(bytes);
     }
 
+    /**
+     * Compares this {@code UniChar} to the given object. These objects are equal
+     * if their byte arrays are equal. For equaling byte arrays it uses
+     * {@link Arrays#equals(byte[], byte[])}.
+     *
+     * @param o The given object to compare.
+     * @return {@code True} if this object equals to the given.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -102,6 +127,11 @@ public class UniChar {
         return Arrays.equals(bytes, uniChar.bytes);
     }
 
+    /**
+     * Calculates a hash code of this object by {@link Arrays#hashCode(byte[])}.
+     *
+     * @return The hash code of this object.
+     */
     @Override
     public int hashCode() {
         return Arrays.hashCode(bytes);
@@ -110,13 +140,6 @@ public class UniChar {
 
     private static byte[] normalize(byte[] code) {
         int end = Math.min(code.length, 4);
-        int start = 0;
-        for (int i=0; i<end; i++) {
-            if (code[i] == 0)
-                start++;
-            else
-                break;
-        }
-        return Arrays.copyOfRange(code, start, end);
+        return Arrays.copyOf(code, end);
     }
 }
