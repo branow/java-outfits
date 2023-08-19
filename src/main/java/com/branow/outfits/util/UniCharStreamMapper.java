@@ -120,12 +120,21 @@ public abstract class UniCharStreamMapper {
     }
 
     /**
-     * Returns the {@code charset} of this object.
+     * Returns the {@code charset} of this mapper.
      *
-     * @return The {@code charset} of this object.
+     * @return The {@code charset} of this mapper.
      */
     public Charset getCharset() {
         return charset;
+    }
+
+    /**
+     * Returns the {@code size} of this mapper.
+     *
+     * @return The {@code size} of this mapper.
+     */
+    public long getSize() {
+        return size;
     }
 
     /**
