@@ -32,7 +32,7 @@
                 <configuration>
                     <groupId>com.branow</groupId>
                     <artifactId>java-outfits</artifactId>
-                    <version>1.2.2</version>
+                    <version>1.2.3</version>
                     <packaging>jar</packaging>
                     <file>${basedir}/out/artifacts/java_outfits_jar/java-outfits.jar</file>
                     <generatePom>true</generatePom>
