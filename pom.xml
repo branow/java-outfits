@@ -23,6 +23,17 @@
         </dependency>
     </dependencies>
 
+    <pluginRepositories>
+        <pluginRepository>
+            <id>maven-snapshots</id>
+            <url>https://repository.apache.org/content/repositories/snapshots/</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>maven-shade-plugin</id>
+            <url>https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-shade-plugin</url>
+        </pluginRepository>
+    </pluginRepositories>
+
     <build>
         <plugins>
             <plugin>
@@ -32,7 +43,7 @@
                 <configuration>
                     <groupId>com.branow</groupId>
                     <artifactId>java-outfits</artifactId>
-                    <version>1.2.3</version>
+                    <version>1.2.4</version>
                     <packaging>jar</packaging>
                     <file>${basedir}/out/artifacts/java_outfits_jar/java-outfits.jar</file>
                     <generatePom>true</generatePom>
