@@ -1,16 +1,69 @@
 package com.branow.outfits.util;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Stream;
+
+import static com.branow.outfits.checker.ParametersChecker.isNullThrow;
+import static java.lang.Math.*;
 
 public class Strings {
 
+    /**
+     * Calculates the percentage of the strings' similarity with OSA distance algorithm.
+     *
+     * @param s1 The first string.
+     * @param s2 The second string.
+     * @return The percentage of the strings' similarity.
+     * @see #calcOptimalStringAlignmentDistance(String, String)
+     */
+    public static double calcStringsSimilarityOSAD(String s1, String s2) {
+        double len = max(s1.length(), s2.length());
+        return 1 - calcOptimalStringAlignmentDistance(s1, s2) / len;
+    }
+
+    /**
+     * Returns the number of operations that should be done on the second string to make both strings similar.
+     *
+     * @param s1 The first string.
+     * @param s2 The second string.
+     * @return The number of operations that includes: deletion, insertion, substitution, transposition.
+     * @throws NullPointerException if either parameter is null.
+     * @see <a href="https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance">OSA algorithm</a>
+     */
+    public static int calcOptimalStringAlignmentDistance(String s1, String s2) {
+        isNullThrow(s1, new NullPointerException("The first string mustn't be null"));
+        isNullThrow(s2, new NullPointerException("The second string mustn't be null"));
+
+        int[][] d = new int[s1.length() + 1][s2.length() + 1];
+
+        for (int i = 0; i <= s1.length(); i++)
+            d[i][0] = i;
+        for (int j = 0; j <= s2.length(); j++)
+            d[0][j] = j;
+
+        for (int i = 1; i <= s1.length(); i++) {
+            for (int j = 1; j <= s2.length(); j++) {
+                int cost = s1.charAt(i - 1) == s2.charAt(j - 1) ? 0 : 1;
+                d[i][j] = Stream.of(
+                        d[i - 1][j] + 1,    //deletion
+                        d[i][j - 1] + 1,            //insertion
+                        d[i - 1][j - 1] + cost      //substitution
+                ).min(Integer::compareTo).get();
+                if (i > 1 && j > 1 && s1.charAt(i - 1) == s2.charAt(j - 2) &&
+                        s1.charAt(i - 2) == s2.charAt(j - 1)) {
+                    d[i][j] = min(d[i][j], d[i - 2][j - 2] + 1);     //transposition
+                }
+            }
+        }
+        return d[s1.length()][s2.length()];
+    }
+
     public static String shift(String base, String start) {
         if (start.length() > base.length())
-            start = start.substring(0, base.length()-1);
+            start = start.substring(0, base.length() - 1);
         int index = base.indexOf(start);
         while (index == -1) {
-            start = start.substring(0, start.length()-1);
+            start = start.substring(0, start.length() - 1);
             if (start.isEmpty())
                 throw new IllegalArgumentException("base doesn't contains start");
             index = base.indexOf(start);
@@ -48,7 +101,7 @@ public class Strings {
         int iMax = 0;
         int cross = 0;
         while (!strings.isEmpty()) {
-            for (int i=0; i<strings.size(); i++) {
+            for (int i = 0; i < strings.size(); i++) {
                 int cCross = getCrossing(result, strings.get(i)).length();
                 if (cCross > cross) {
                     cross = cCross;

@@ -6,7 +6,8 @@
 
     <groupId>com.branow</groupId>
     <artifactId>java-outfits</artifactId>
-    <version>1.2.4</version>
+    <version>1.2.5</version>
+    <packaging>jar</packaging>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -23,41 +24,12 @@
         </dependency>
     </dependencies>
 
-    <pluginRepositories>
-        <pluginRepository>
-            <id>maven-snapshots</id>
-            <url>https://repository.apache.org/content/repositories/snapshots/</url>
-        </pluginRepository>
-        <pluginRepository>
-            <id>maven-shade-plugin</id>
-            <url>https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-shade-plugin</url>
-        </pluginRepository>
-    </pluginRepositories>
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub branow Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/branow/java-outfits</url>
+        </repository>
+    </distributionManagement>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-install-plugin</artifactId>
-                <version>2.4</version>
-                <configuration>
-                    <groupId>com.branow</groupId>
-                    <artifactId>java-outfits</artifactId>
-                    <version>1.2.4</version>
-                    <packaging>jar</packaging>
-                    <file>${basedir}/out/artifacts/java_outfits_jar/java-outfits.jar</file>
-                    <generatePom>true</generatePom>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>install-jar-lib</id>
-                        <goals>
-                            <goal>install-file</goal>
-                        </goals>
-                        <phase>validate</phase>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 </project>
